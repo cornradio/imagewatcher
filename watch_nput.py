@@ -73,20 +73,6 @@ class MyDirEventHandler(FileSystemEventHandler):
 if __name__ == '__main__':
     os.system("mode con cols=50 lines=30")
     print(f"""
-程序作者 : kasusaland@gmail.com 
-时间: 2020-4-28
-
-向c:/test 中丢小马图片吧!
-程序会自动根据丢进顺序进行命名排序.
-就不用理会windows的 [重名文件] 弹窗了
-
-!!! 注意:
-在使用本程序之前赢要确保 [test] 
-文件夹中的文件名都是 [数字.xxx]
-或者您可以每次使用之前把test中的文件清空,
-清空之后会从 [1.xxx] 开始排
-2022-5-19 15:16:57
-请使用Chrome浏览器，Edge浏览器会导致无法对图片重命名。
 """)
 
     # 创建观察者对象
