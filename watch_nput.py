@@ -2,63 +2,58 @@ import os
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import time
+from console_color_writer import *
+
+
+def get_id(directory, new_file_name):
+    # 获取丢进去之前的最大id（名字编码，空的话给1）
+    files = []
+    for root, dirs, files in os.walk(directory):
+        pass
+    # 去掉刚刚加入的文件名
+    files.remove(new_file_name)
+    files2 = files.copy()
+    print_verbose(files)
+    # 跳过非数字的文件名 如 .DSstore
+    for x in files2:
+        if x.split(".")[0].isdigit():
+            pass
+        else:
+            # print_red("toremove",x)
+            files.remove(x)
+    # 现在所有文件名应都是数字，这一小段返回最大数字，如果没有文件，返回1
+    if len(files) > 0:
+        nums = []
+        for item in files:
+            nums.append(int(item.split(".")[0]))
+        nums.sort()
+        filenum = nums[-1]
+        filenum += 1
+    else:
+        filenum = 1
+    print_verbose("获得可用数字:", filenum)
+    return filenum
 
 
 class MyDirEventHandler(FileSystemEventHandler):
-
     def on_moved(self, event):
         pass
 
     def on_created(self, event):
-        print(event)
-        # try:
-        #         except :
-        # print('some thing is wrong!!! try again or restart this Script.')
-        # pass
-        # 获得丢进去的文件的后缀
-        a = event.src_path.split(".")
-        suffix = a[-1]
-        # 获取丢进去的文件丢到的目录
-        b = event.src_path.split("\\")
-        new_file_name = b[-1]
-        directory = event.src_path.replace(b[-1], "")
-        print("\n获取目录位置:", directory)
-        # 获取丢进去之前的最大id（名字编码，空的话给1）
-        # 获取所有文件名称
-        files = []
-        for root, dirs, files in os.walk(directory):
-            pass
-        # print(files)
-        # 先去掉自身（以防自身是数字文件名
-        files.remove(new_file_name)
-        # 去掉非数字
-        files2 = files.copy()
-        for x in files:
-            if str.isdigit(x.split(".")[0]):
-                pass
-            else:
-                files2.remove(x)
-        files = files2
+        print(f'文件创建:{event.src_path}')
+        "/Users/kasusa/Desktop/电脑壁纸-重命名/图片4.jpg"
+        new_file_name = event.src_path.split("/")[-1]
+        directory = event.src_path.replace('/' + new_file_name, "")
+        suffix = new_file_name.split(".")[-1]  # 获得丢进去的文件的后缀
+        print_verbose(f'文件全名:{new_file_name}')
+        print_verbose(f'文件目录:{directory}')
+        print_verbose(f'文件后缀:{suffix}')
 
-        # files.remove(b[1])
-        if len(files) > 0:
-            nums = []
-            for item in files:
-                nums.append(int(item.split(".")[0]))
-            nums.sort()
-            filenum = nums[-1]
-            print("获得最大目前数字:", filenum)
-            filenum += 1
-        else:
-            filenum = 1
-        print("获得可用数字:", filenum)
         # 制作结果位置+名字字符串
-        moved = directory + "\\" + str(filenum) + "." + suffix
-        print("文件将重命名为:", moved)
+        moved = directory + "/" + str(get_id(directory, new_file_name)) + "." + suffix
+        print("重命名为:", moved)
         # 重命名
         os.replace(event.src_path, moved)
-        print("文件重命名完成,请手动刷新资源管理器 \n")
-
 
     def on_deleted(self, event):
         pass
@@ -70,21 +65,15 @@ class MyDirEventHandler(FileSystemEventHandler):
 """
 使用watchdog 监控文件的变化
 """
-if __name__ == '__main__':
-    os.system("mode con cols=50 lines=30")
-    print(f"""
-""")
 
-    # 创建观察者对象
+def watch_dir(path):
     observer = Observer()
-    # 创建事件处理对象
     fileHandler = MyDirEventHandler()
-
-    # 为观察者设置观察对象与处理事件对象
-    x = input("输入要监控的文件夹目录:")
+    # x = input("输入要监控的文件夹目录:")
+    x = path
     observer.schedule(fileHandler, x, True)
     observer.start()
-    print("----开始监控文件夹----")
+    print_green("开始监控", f"{x}")
     try:
         while True:
             time.sleep(2)

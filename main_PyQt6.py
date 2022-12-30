@@ -2,11 +2,12 @@
 import sys
 import os
 from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
 import time
 # 这里import 你需要用的qt模块
 from PyQt6.QtWidgets import QApplication,QWidget,QLineEdit,QPushButton,QVBoxLayout,QTextEdit,QLabel
 from PyQt6.QtGui import QIcon
+
+import watch_nput
 from watch_nput import MyDirEventHandler
 
 # 这里是你的主窗口类
@@ -24,7 +25,7 @@ class myapp(QWidget):
         self.lable = QLabel("输入文件夹路径:")
         self.inputField = QLineEdit()
 
-        self.button = QPushButton("开始监听",clicked=self.monitoring) # 这里是按钮名称、点击事件
+        self.button = QPushButton("开始监听",clicked=self.button_click) # 这里是按钮名称、点击事件
         self.output = QTextEdit()
         # 将组件添加到布局
         layout.addWidget(self.lable)
@@ -34,26 +35,9 @@ class myapp(QWidget):
 
 
     # 这里是按钮点击事件 连接到上面的button
-    def monitoring(self):
-        # 创建观察者对象
-        observer = Observer()
-        # 创建事件处理对象
-        fileHandler = MyDirEventHandler()
+    def button_click(self):
+        watch_nput.watch_dir(self.inputField.text())
 
-        # 为观察者设置观察对象与处理事件对象
-        x = self.inputField.text()
-        observer.schedule(fileHandler, x, True)
-        observer.start()
-
-        self.output.append("----开始监控文件夹----")
-        try:
-            while True:
-                time.sleep(2)
-        except KeyboardInterrupt:
-            observer.stop()
-        observer.join()
-
-        print("hello!")
 
 
 # 这里是主函数
