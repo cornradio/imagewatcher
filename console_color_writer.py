@@ -8,7 +8,7 @@ Magenta: \033[35m
 Cyan: \033[36m
 White: \033[37m
 '''
-verbose = False
+verbose = True
 def print_verbose(str2, str1='verbose'):
     if verbose:
         print(f"\033[1;37;40m {str1} \033[0m {str2}")

@@ -31,7 +31,7 @@ def get_id(directory, new_file_name):
         filenum += 1
     else:
         filenum = 1
-    print_verbose("获得可用数字:", filenum)
+    print_verbose(f"获得可用数字:{filenum}", )
     return filenum
 
 
@@ -42,8 +42,8 @@ class MyDirEventHandler(FileSystemEventHandler):
     def on_created(self, event):
         print(f'文件创建:{event.src_path}')
         "/Users/kasusa/Desktop/电脑壁纸-重命名/图片4.jpg"
-        new_file_name = event.src_path.split("/")[-1]
-        directory = event.src_path.replace('/' + new_file_name, "")
+        new_file_name = os.path.split(event.src_path)[1]
+        directory = os.path.split(event.src_path)[0]
         suffix = new_file_name.split(".")[-1]  # 获得丢进去的文件的后缀
         print_verbose(f'文件全名:{new_file_name}')
         print_verbose(f'文件目录:{directory}')
@@ -69,7 +69,6 @@ class MyDirEventHandler(FileSystemEventHandler):
 def watch_dir(path):
     observer = Observer()
     fileHandler = MyDirEventHandler()
-    # x = input("输入要监控的文件夹目录:")
     x = path
     observer.schedule(fileHandler, x, True)
     observer.start()
@@ -80,3 +79,8 @@ def watch_dir(path):
     except KeyboardInterrupt:
         observer.stop()
     observer.join()
+
+
+if __name__ == '__main__':
+    x = input("输入要监控的文件夹目录:")
+    watch_dir(x)
