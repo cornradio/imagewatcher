@@ -70,7 +70,7 @@ def watch_dir(path):
     observer = Observer()
     fileHandler = MyDirEventHandler()
     x = path
-    observer.schedule(fileHandler, x, True)
+    observer.schedule(fileHandler, x)
     observer.start()
     print_green("开始监控", f"{x}")
     try:
