@@ -3,6 +3,7 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import time
 from console_color_writer import *
+import argparse
 
 
 def get_id(directory, new_file_name):
@@ -82,5 +83,11 @@ def watch_dir(path):
 
 
 if __name__ == '__main__':
-    x = input("输入要监控的文件夹目录:")
+    parser = argparse.ArgumentParser(description="监控指定文件夹的变化")
+    parser.add_argument('-p', '--path', type=str, help='要监控的文件夹目录')
+    args = parser.parse_args()
+    if args.path:
+        x = args.path
+    else:
+        x = input("输入要监控的文件夹目录:")
     watch_dir(x)

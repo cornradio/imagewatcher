@@ -1,2 +1,2 @@
 venv\Scripts\Activate.ps1
-python .\watch_nput.py
+python .\watch_nput.pyr
